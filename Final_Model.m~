@@ -21,8 +21,8 @@ muDelta = 0.1;
 zeta = 1;
 
 % parameter for treshold function in formulas for delta, ebta and eta
-sigma = 40; 
-tau = 0.5; %is treshold for qFear(used in speed parameters)
+sigma = 40; % Should be a number above 20
+tau = 0.5; %is treshold for qFear(affect on speedparameters
 
 % parameters for combination functions for intentions and emotions for options.
 % Calculated together it should always equal 1
@@ -41,13 +41,14 @@ omegaOIBA = omegaOIA2 + omegaOBA3; % 1
 standardEpsilonFear = 1; standardDeltaFear = 1; standardEtaFear = 0.5; standardBetaFear = 0.5; standardNuFear = 0.5;
 
 %initial values for Belief about a situation
+
 standardEpsilonBeliefSituation = 1;
 standardDeltaBeliefSituation = 0.5;
 standardEtaBeliefSituation = 0.5;
 standardBetaBeliefSituation = 0.5;
 
-%1 means very relevant and relevant for survival and 
-%0 means situation dangerious but not relevant for survival
+% 1 means very relevant and relevant for survival and 
+% 0 means situation dangerious but not relevant for survival
 standardRBeliefSituation = 1; 
 standardPBeliefSituation = 0; 
 
@@ -65,14 +66,15 @@ standardEtaEmotionExitOption1 = 0.5;
 standardBetaEmotionExitOption1 = 0.5; 
 
 
-%initial or standard values for parameters/variables that have to do with
-%intensions.
+% initial or standard values for parameters/variables that have to do with 
+% INTENTIONS for exit options
 
 initialQIntentionExitOption1 = 0;
 standardEpsilonIntentionExitOption1 = 1; 
 standardDeltaIntentionExitOption1 = 1; 
 standardEtaIntentionExitOption1 = 0.5; 
 standardBetaIntentionExitOption1 = 0.5; 
+
 
 
 %defining size of matricis
@@ -125,12 +127,12 @@ qIntentionExitOption1Star = zeros(numberOfAgents, numberOfSteps + 1);
 qIntentionExitOption1StarStar = zeros(numberOfAgents, numberOfSteps + 1);
 
 
-%Set initial values.
+% Set initial values.
 qFear = [0; 0; 0; 1; 1; 1; 0.2; 0.2; 0.1; 0.3]; 
 qBeliefSituation = [0.8; 0.2; 0.4; 0.6; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; ];
 qBeliefExitOption1 = [1; 1; 1; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 1];
 
-%Setting the values for parameters and initial values for variables
+% setting the values for parameters and initial values for variables
 for i = 1:numberOfAgents
     epsilonFear(i, 1) = standardEpsilonFear; deltaFear(i, 1) = standardDeltaFear; etaFear(i, 1) = standardEtaFear; betaFear(i,1) = standardBetaFear; nuFear(i,1) = standardNuFear;
 rBeliefSituation(i, 1) = standardRBeliefSituation; pBeliefSituation(i,1) = standardPBeliefSituation;
@@ -144,7 +146,7 @@ qEmotionExitOption1(i, 1) = initialQEmotionExitOption1;
 etaEmotionExitOption1(i, 1) = standardEtaEmotionExitOption1; 
 
 
-%Constant for all.
+% Constant for all.....
 qIntentionExitOption1(i, 1) = initialQIntentionExitOption1; 
 epsilonIntentionExitOption1(i,1) = standardEpsilonIntentionExitOption1; 
 deltaIntentionExitOption1(i, 1) = standardDeltaIntentionExitOption1;  
@@ -160,7 +162,7 @@ deltaBeliefExitOption1(i, 1) = initialDeltaBeliefExitOption1;
 etaBeliefExitOption1(i, 1) = initialEtaBeliefExitOption1; 
 end
 
-%setting the beliefs of the emergenecy options about their accessibility
+% setting the beliefs of the emergenecy options about their accessibility
 pBeliefExitOption1(1,1) = 0; % not accessible
 rBeliefExitOption1(1,1) = 1; % information = relevant for survival
 
@@ -171,9 +173,12 @@ for i = 1: numberOfAgents
     
 end
 
-%Calculate gamma's
-%gammaFear = epsilonFear of sender * deltaFear of receiver
-%overallGammaFear = sum of all gamma's from the senders to the receiver 
+
+
+
+%#### calculating gamma's and overallgamma's that are CONSTANT over all timesteps 
+% gammaFear = epsilonFear of sender * deltaFear of receiver
+% overallGammaFear = sum of all gamma's from the senders to the receiver 
 
 for i = 1: numberOfAgents
     for j = 1: numberOfAgents
@@ -213,8 +218,8 @@ end
 end
 
 
-%The calculations that run over time ; Beliefs, Intentions,Emotions and
-%Fear.
+% The calculations that run over time ; Beliefs, Intentions,Emotions and
+% Fear.
 
 
 for n = 1: numberOfSteps;
@@ -237,8 +242,9 @@ end
 end
 
 
-%Belief about the situation
-%calculates the contagion strength for belief about the situation
+
+% Belief about the situation
+% calculates the contagion strength for belief about the situation
 %overallGammaBeliefSituation = sum of all gamma's from the senders to a the receiver
 
 for i = 1: numberOfAgents
@@ -269,7 +275,11 @@ end
 for i = 1: numberOfAgents
 for j = 1: numberOfAgents
   gammaBeliefExitOption1(i,j) = epsilonBeliefExitOption1(j,1) * deltaBeliefExitOption1(i, n);
-  overallGammaBeliefExitOption1(i, n) = sum(gammaBeliefExitOption1(i,:)) - gammaBeliefExitOption1(i, i); 
+
+ 
+  overallGammaBeliefExitOption1(i, n) = sum(gammaBeliefExitOption1(i,:)) - gammaBeliefExitOption1(i, i);
+
+  
 end
 end
 
@@ -286,6 +296,7 @@ else
 betaBeliefExitOption1(i, n+1) = betaBeliefExitOption1(i, n); 
 etaBeliefExitOption1(i, n+1) = etaBeliefExitOption1(i, n); 
 deltaBeliefExitOption1(i, n+1) = deltaBeliefExitOption1(i, n); 
+
 end
 end
 
@@ -346,8 +357,8 @@ qIntentionExitOption1StarStar(i, n+1) =(omegaOIA1 / omegaOIEBA) * qIntentionExit
         qIntentionExitOption1StarStar(i, n+1) =(omegaOIA2 / omegaOIBA) * qIntentionExitOption1Star(i, n) + (omegaOBA3 / omegaOIBA) * qBeliefExitOption1(i, n);
     end
 end
+%qIntentionExitOption = intentions of persons for the exit option 
 
-%qIntentionExitOption = intentions of persons for the exit option
 for i=1: numberOfAgents
     for j= 1: numberOfAgents
         if i <= numberOfAgents
@@ -384,7 +395,7 @@ for i=1:numberOfAgents
     end
 end
 
-%making the plots
+% making the plots
 view(az,el); colormap(map); 
 material 'shiny'; 
 lighting 'gouraud';
