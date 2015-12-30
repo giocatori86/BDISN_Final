@@ -10,14 +10,14 @@
 
 % Belief about an exit and emotions felt for different exits.
 deltaT = 0.1;
-numberOfSteps = 600;
+numberOfSteps = 300;
 numberOfAgents = 10;
 
 % The speed parameters for the formulas with Beta,Eta and Delta parameters.
 % The parameters are already optimized
-muBeta = 0.55; 
-muEta = 0.34;
-muDelta = 0.3;
+muBeta = 0.1; 
+muEta = 0.1;
+muDelta = 0.1;
 
 %personality characteristic that controls what you do in case or fear: + is
 %positive and a - is negative
@@ -131,9 +131,9 @@ qIntentionExitOption1StarStar = zeros(numberOfAgents, numberOfSteps + 1);
 
 
 % Set initial values.
-qFear = [0; 0; 0; 1; 1; 1; 0.5; 0.5; 0.5; 0; 0; 0; 1; 1; 1; 0.5; 0.5; 0.5]; 
-qBeliefSituation = [0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5];
-qBeliefExitOption1 = [1; 1; 1; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 1; 1; 1; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5];
+qFear = [0; 0; 0; 1; 1; 1; 0.2; 0.2; 0.1; 0.3]; 
+qBeliefSituation = [0.8; 0.2; 0.4; 0.6; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; ];
+qBeliefExitOption1 = [1; 1; 1; 0.5; 0.5; 0.5; 0.5; 0.5; 0.5; 1];
 
 % setting the values for parameters and initial values for variables
 for i = 1:numberOfAgents
@@ -295,8 +295,7 @@ if i <= numberOfAgents
 betaBeliefExitOption1(i, n+1) = betaBeliefExitOption1(i, n) + muBeta * (1 /(1 + exp(-sigma*(qFear(i, n) - tau)))) * (1- qBeliefExitOption1(i, n)) * ((zeta *pBeliefExitOption1(1,1)) + ((1-zeta) * (1-pBeliefExitOption1(1, 1))) - betaBeliefExitOption1(i, n)) * deltaT;
 etaBeliefExitOption1(i, n+1) = etaBeliefExitOption1(i, n) + muEta * (1 / (1+ exp(-sigma*(qFear(i, n) - tau)))) * (rBeliefExitOption1(1, 1) * (1 -pBeliefExitOption1(1, 1)) * (qBeliefExitOption1(i, n) - etaBeliefExitOption1(i, n))) * deltaT;
 deltaBeliefExitOption1(i, n+1) = deltaBeliefExitOption1(i, n) + muDelta * (1 / (1 + exp(-sigma*(qFear(i, n) - tau)))) * ((1 -( 1- rBeliefExitOption1(1,1)) * qBeliefExitOption1(i, n)) - deltaBeliefExitOption1(i, n)) * deltaT;
-else
-    
+else 
 betaBeliefExitOption1(i, n+1) = betaBeliefExitOption1(i, n); 
 etaBeliefExitOption1(i, n+1) = etaBeliefExitOption1(i, n); 
 deltaBeliefExitOption1(i, n+1) = deltaBeliefExitOption1(i, n); 
@@ -307,15 +306,13 @@ end
 %qStarBeliefExitOption = group impact of qBeliefExitOptions on receiver
 for i=1: numberOfAgents
 for j= 1: numberOfAgents
-
 qBeliefExitOption1Star(i, n + 1) = (gammaBeliefExitOption1(i, 1: numberOfAgents) * qBeliefExitOption1(1: numberOfAgents, n))/overallGammaBeliefExitOption1(i, n);
 end
 end
 
 for i=1: numberOfAgents
     if i<= numberOfAgents
-      qBeliefExitOption1(i, n+1) = qBeliefExitOption1(i, n) + overallGammaBeliefExitOption1(i, n) * ( etaBeliefExitOption1(i, n) * ( betaBeliefExitOption1(i, n) * (1 - ( 1 - qBeliefExitOption1Star(i, n)) * ( 1 - qBeliefExitOption1(i, n))) + (1 - betaBeliefExitOption1(i,n)) * qBeliefExitOption1Star (i, n) * qBeliefExitOption1(i, n)) + (1 - etaBeliefExitOption1(i,n)) * qBeliefExitOption1Star(i, n) - qBeliefExitOption1(i, n)) * deltaT;
-     
+      qBeliefExitOption1(i, n+1) = qBeliefExitOption1(i, n) + overallGammaBeliefExitOption1(i, n) * ( etaBeliefExitOption1(i, n) * ( betaBeliefExitOption1(i, n) * (1 - ( 1 - qBeliefExitOption1Star(i, n)) * ( 1 - qBeliefExitOption1(i, n))) + (1 - betaBeliefExitOption1(i,n)) * qBeliefExitOption1Star (i, n) * qBeliefExitOption1(i, n)) + (1 - etaBeliefExitOption1(i,n)) * qBeliefExitOption1Star(i, n) - qBeliefExitOption1(i, n)) * deltaT; 
     else
       
 qBeliefExitOption1(i, n+1) = qBeliefExitOption1(i, n); 
@@ -392,7 +389,7 @@ Z5 = zeros(numberOfAgents, numberOfSteps);
 
 for i=1:numberOfAgents
     for j=1:numberOfSteps
-        Z1(i, j) = qFear(i, j);
+        Z1(i, j) = qFearStar(i, j);
         Z2(i, j) = qBeliefSituation(i, j); 
         Z3(i, j) = qBeliefExitOption1(i, j); 
         Z4(i, j) = qIntentionExitOption1(i, j); 
