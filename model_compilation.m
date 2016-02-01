@@ -5,7 +5,7 @@
 %                    Copying will be punished
 
 
-function model = model_compilation(para_values_QFear,para_values_qBeliefSituation,para_values_qBeliefExitOption1,X1,Y1,Z1,Z2,Z3,Z4,Z5)
+function [Z1_new,Z2_new,Z3_new,Z4_new,Z5_new] = model_compilation(para_values_QFear,para_values_qBeliefSituation,para_values_qBeliefExitOption1,X1,Y1,Z1,Z2,Z3,Z4,Z5)
 
 %   Calculate size of Given Matrix
 Size = size(Y1);
@@ -395,5 +395,9 @@ for i=1:numberOfAgents
         
     end
 end
-model = Z4;
+Z1_new = Z1;
+Z2_new = Z2;
+Z3_new = Z3;
+Z4_new = Z4;
+Z5_new = Z5;
 end

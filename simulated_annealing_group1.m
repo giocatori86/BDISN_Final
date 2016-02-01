@@ -1,4 +1,4 @@
-%          Simulated Annealing                  Assignment Week 7
+%          Simulated Annealing                  Final Assignment
 %          Sander Martijn Kerkdijk               Max Turpijn
 %          Course: Behaviour Dynamics in social Networks 
 %               Vrije Universiteit Amsterdam 2015
@@ -8,24 +8,23 @@
 
 
 % Load Referenceset (outputs_plus_noises)
-load outputs_plus_noises.mat;
+load matlab.mat;
 
 % learning rate
-Diagonal_Random = 0.2;
+Diagonal_Random = 0.1;
 
 % Initialize Temperature
 T = 3;
 
 % Number of iterations to find best Accurancy
-epochs = 100;
+epochs = 50;
 
 % progress of error to plot
 error = zeros(1, epochs);
-
 % Parameter initialization: weights (3*10)
-para_values_QFear = rand(10, 1);
-para_values_qBeliefSituation = rand(10, 1);
-para_values_qBeliefExitOption1 = rand(10, 1);
+para_values_QFear = round(rand(10, 1),2);
+para_values_qBeliefSituation = round(rand(10, 1),2);
+para_values_qBeliefExitOption1 = round(rand(10, 1),2);
 
 % Calculate SSR for the para values on EmpericalData2 set
 ssr_now = calculate_SSR( para_values_QFear,para_values_qBeliefSituation,para_values_qBeliefExitOption1,X1,Y1,Z1,Z2,Z3,Z4,Z5);
@@ -34,15 +33,16 @@ ssr_now = calculate_SSR( para_values_QFear,para_values_qBeliefSituation,para_val
 count = 1;
 
 while (T > 0.001)
+   
    % Decreasing the temperature on every step
     T = T * 0.99 ;
  
     error(count) = ssr_now;
     % Temporary Para Values are Para_values + Randomized value between 0
     % and 1 * Diagonal Random
-    temp_para_values_QFear = para_values_QFear + (rand(10,1)-0.5) * Diagonal_Random;
-    temp_para_values_qBeliefSituation = para_values_qBeliefSituation + (rand(10,1)-0.5) * Diagonal_Random;
-    temp_para_values_qBeliefExitOption1 = para_values_qBeliefExitOption1 + (rand(10,1)-0.5) * Diagonal_Random;
+    temp_para_values_QFear = round(para_values_QFear + (rand(10,1)-0.5) * Diagonal_Random,2);
+    temp_para_values_qBeliefSituation = round(para_values_qBeliefSituation + (rand(10,1)-0.5) * Diagonal_Random,2);
+    temp_para_values_qBeliefExitOption1 = round(para_values_qBeliefExitOption1 + (rand(10,1)-0.5) * Diagonal_Random,2);
     
     
     % For every element of para_values adjust with temporary para_values)
@@ -58,7 +58,7 @@ while (T > 0.001)
         
         % Calculate Delta with temporary SSR - SSR_now
         delta = temp_ssr - ssr_now ;
-        
+        disp(ssr_now);
         % If Delta < 0 OR random Variable < exponential(-delta/Temperature)
         if ( (delta < 0) || (rand() < exp(-delta/T) )  )
             para_values_QFear = temp_para_values_QFear ;
