@@ -19,6 +19,7 @@ T = 3;
 % Number of iterations to find best Accurancy
 epochs = 50;
 
+z = clock;
 % progress of error to plot
 error = zeros(1, epochs);
 % Parameter initialization: weights (3*10)
@@ -32,10 +33,10 @@ ssr_now = calculate_SSR( para_values_QFear,para_values_qBeliefSituation,para_val
 % Initialize Count Variable
 count = 1;
 
-while (T > 0.001)
+while (T > 0.0000001)
    
    % Decreasing the temperature on every step
-    T = T * 0.99 ;
+    T = T * 0.999999 ;
  
     error(count) = ssr_now;
     % Temporary Para Values are Para_values + Randomized value between 0
@@ -55,10 +56,20 @@ while (T > 0.001)
         end
         % Calculate temporary SSR with the temp para_values on ReferenceSet 
         temp_ssr = calculate_SSR( temp_para_values_QFear,temp_para_values_qBeliefSituation,temp_para_values_qBeliefExitOption1,X1,Y1,Z1,Z2,Z3,Z4,Z5);
+        clc;
         
+        
+        fprintf('Simulated_Annealing Final Assignment Group 2\n--------- \n runningTime:  %.2f\n runs:        %.2f\n',etime(clock, z),count);
+       fprintf('\n\nSSR                   = %.2f\n',ssr_now);
+       fprintf('\nGFearStar             = ');
+       fprintf('%.2f ', para_values_QFear);
+       fprintf('\nqBeliefSituation      = ');
+       fprintf('%.2f ', para_values_qBeliefSituation);
+       fprintf('\nqBeliefExitOption1    = ');
+       fprintf('%.2f ', para_values_qBeliefExitOption1);
         % Calculate Delta with temporary SSR - SSR_now
         delta = temp_ssr - ssr_now ;
-        disp(ssr_now);
+        
         % If Delta < 0 OR random Variable < exponential(-delta/Temperature)
         if ( (delta < 0) || (rand() < exp(-delta/T) )  )
             para_values_QFear = temp_para_values_QFear ;
@@ -67,6 +78,7 @@ while (T > 0.001)
              
             % ssr_now becomes temporary SSR 
             ssr_now = temp_ssr ;
+            
         end
     count = count + 1;
 end
@@ -78,13 +90,15 @@ title({'Plot of Error within Weights'});
 xlabel('epochs');
 ylabel('SSR');
 
+clc;
 % Show best values in the terminal
-disp('qfear =');
-disp(para_values_QFear);
+disp('Final Outcome:');
+disp('GFearStar =');
+fprintf('%.2f', para_values_QFear)
 disp('qBeliefSituation =');
-disp(para_values_qBeliefSituation);
+fprintf('%.2f', para_values_qBeliefSituation);
 disp('qBeliefExitOption1 =');
-disp(para_values_qBeliefExitOption1);
+fprintf('%.2f', para_values_qBeliefExitOption1)
 
 
 

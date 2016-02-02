@@ -251,6 +251,7 @@ end
 %calculates the contagion strength for belief about the situation
 %overallGammaBeliefSituation = sum of all gamma's from the senders to a the receiver
 
+
 for i = 1: numberOfAgents
 for j = 1: numberOfAgents
 gammaBeliefSituation(i, j) = epsilonBeliefSituation(i,1) * deltaBeliefSituation(j, n);
