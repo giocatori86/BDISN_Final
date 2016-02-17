@@ -10,8 +10,9 @@
 % Load Referenceset (outputs_plus_noises)
 load matlab.mat;
 
+
 % learning rate
-Diagonal_Random = 0.1;
+Diagonal_Random = 0.05;
 
 % Initialize Temperature
 T = 3;
@@ -33,10 +34,10 @@ ssr_now = calculate_SSR( para_values_QFear,para_values_qBeliefSituation,para_val
 % Initialize Count Variable
 count = 1;
 
-while (T > 0.0000001)
+while (T > 0.001)
    
    % Decreasing the temperature on every step
-    T = T * 0.999999 ;
+    T = T * 0.999 ;
  
     error(count) = ssr_now;
     % Temporary Para Values are Para_values + Randomized value between 0
@@ -60,7 +61,7 @@ while (T > 0.0000001)
         
         
         fprintf('Simulated_Annealing Final Assignment Group 2\n--------- \n runningTime:  %.2f\n runs:        %.2f\n',etime(clock, z),count);
-       fprintf('\n\nSSR                   = %.2f\n',ssr_now);
+       fprintf('\n\nSSR                   = %.5f\n',ssr_now);
        fprintf('\nGFearStar             = ');
        fprintf('%.2f ', para_values_QFear);
        fprintf('\nqBeliefSituation      = ');
@@ -93,12 +94,13 @@ ylabel('SSR');
 clc;
 % Show best values in the terminal
 disp('Final Outcome:');
-disp('GFearStar =');
-fprintf('%.2f', para_values_QFear)
-disp('qBeliefSituation =');
-fprintf('%.2f', para_values_qBeliefSituation);
-disp('qBeliefExitOption1 =');
-fprintf('%.2f', para_values_qBeliefExitOption1)
+fprintf('\n\nSSR                   = %.6f\n',ssr_now);
+       fprintf('\nGFearStar             = ');
+       fprintf('%.2f ', para_values_QFear);
+       fprintf('\nqBeliefSituation      = ');
+       fprintf('%.2f ', para_values_qBeliefSituation);
+       fprintf('\nqBeliefExitOption1    = ');
+       fprintf('%.2f ', para_values_qBeliefExitOption1);
 
 
 
