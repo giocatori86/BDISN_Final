@@ -10,6 +10,13 @@
 % Load Referenceset (outputs_plus_noises)
 load matlab.mat;
 
+X1= X1(:,1:60);
+Z1= Z1(:,1:60);
+Z2= Z2(:,1:60);
+Z3= Z3(:,1:60);
+Z4= Z4(:,1:60);
+Z5= Z5(:,1:60);
+
 
 % learning rate
 Diagonal_Random = 0.05;
