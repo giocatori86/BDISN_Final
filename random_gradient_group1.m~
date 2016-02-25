@@ -16,8 +16,6 @@ Z3= Z3(:,1:60);
 Z4= Z4(:,1:60);
 Z5= Z5(:,1:60);
 
-z = clock;
-
 Diagonal_Random = 0.1;
 
 % Number of iterations to find best Accurancy
@@ -70,8 +68,7 @@ while (count <= epochs)
 
         end
     count = count + 1;
-    clc;
-     fprintf('Random Gradient Final Assignment Group 2\n--------- \n runningTime:  %.2f\n runs:        %.2f\n',etime(clock, z),count);
+     fprintf('Simulated_Annealing Final Assignment Group 2\n--------- \n runningTime:  %.2f\n runs:        %.2f\n',etime(clock, z),count);
        fprintf('\n\nSSR                   = %.5f\n',ssr_now);
        fprintf('\nGFearStar             = ');
        fprintf('%.2f ', para_values_QFear);
